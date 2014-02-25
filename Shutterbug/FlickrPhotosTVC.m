@@ -43,6 +43,15 @@
     return cell;
 }
 
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    id detail = self.splitViewController.viewControllers[1]; //Gets the Detail
+    if ([detail isKindOfClass:[ImageViewController class]]) {
+        [self prepareImageViewController:detail toDisplayPhoto:self.photos[indexPath.row]];
+    }
+}
+
 #pragma mark - Navigation
 
 - (void)prepareImageViewController:(ImageViewController *)ivc toDisplayPhoto:(NSDictionary *)photo {
