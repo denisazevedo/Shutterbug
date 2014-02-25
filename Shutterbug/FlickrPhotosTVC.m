@@ -47,6 +47,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     id detail = self.splitViewController.viewControllers[1]; //Gets the Detail
+    if ([detail isKindOfClass:[UINavigationController class]]) {
+        detail = [((UINavigationController *)detail).viewControllers firstObject]; //Gets the root VC
+    }
     if ([detail isKindOfClass:[ImageViewController class]]) {
         [self prepareImageViewController:detail toDisplayPhoto:self.photos[indexPath.row]];
     }
@@ -62,7 +65,6 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 
     if ([sender isKindOfClass:[UITableViewCell class]]) {
-
         NSIndexPath *indexPath = [self.tableView indexPathForCell:sender];
         if (indexPath) {
             if ([segue.identifier isEqualToString:@"Display Photo"]) {
