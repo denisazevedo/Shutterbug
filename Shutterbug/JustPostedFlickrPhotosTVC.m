@@ -20,17 +20,24 @@
     [self fetchPhotos];
 }
 
-- (void)fetchPhotos {
+- (IBAction)fetchPhotos {
     
+    [self.refreshControl beginRefreshing];
     NSURL *url = [FlickrFetcher URLforRecentGeoreferencedPhotos];
-    NSData *jsonResults = [NSData dataWithContentsOfURL:url];
-//    NSError *error = nil;
-    NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:jsonResults
-                                                                        options:0
-                                                                          error:NULL]; //error:&error];
-    //NSLog(@"Flickr result = %@", propertyListResults);
-    NSArray *photos = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PHOTOS];
-    self.photos = photos;
+    
+    dispatch_queue_t fetchQ = dispatch_queue_create("flickr fetcher", NULL);
+    dispatch_async(fetchQ, ^{
+        NSData *jsonResults = [NSData dataWithContentsOfURL:url];
+        NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:jsonResults
+                                                                            options:0
+                                                                              error:NULL]; //error:&error];
+        //NSLog(@"Flickr result = %@", propertyListResults);
+        NSArray *photos = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PHOTOS];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.refreshControl endRefreshing];
+            self.photos = photos;
+        });
+    });
 }
 
 @end
