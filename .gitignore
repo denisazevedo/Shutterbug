@@ -1,3 +1,9 @@
+# Private API Key
+#./Shutterbug/FlickrFetcher/FlickrAPIKey.h
+#*/FlickrFetcher/*
+./Shutterbug/FlickrFetcher/FlickrAPIKey.h
+*/Shutterbug/*
+
 # Xcode
 .DS_Store
 */build/*
