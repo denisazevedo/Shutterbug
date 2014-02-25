@@ -24,11 +24,13 @@
     
     NSURL *url = [FlickrFetcher URLforRecentGeoreferencedPhotos];
     NSData *jsonResults = [NSData dataWithContentsOfURL:url];
+//    NSError *error = nil;
     NSDictionary *propertyListResults = [NSJSONSerialization JSONObjectWithData:jsonResults
                                                                         options:0
-                                                                          error:NULL];
-    NSLog(@"Flickr result = %@", propertyListResults);
-    self.photos = nil;
+                                                                          error:NULL]; //error:&error];
+    //NSLog(@"Flickr result = %@", propertyListResults);
+    NSArray *photos = [propertyListResults valueForKeyPath:FLICKR_RESULTS_PHOTOS];
+    self.photos = photos;
 }
 
 @end
